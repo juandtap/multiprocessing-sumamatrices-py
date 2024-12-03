@@ -23,16 +23,14 @@ def sumar_parcial(matrixA, matrixB, sumaMatrix, filaInicio, filaFin):
 
 if __name__ == "__main__":
     
-    size = 5000
-    num_procesos = 20
+    size = 18000
+    num_procesos = 16
 
     # Generar matrices
     matrixA = generar_matriz(size)
     matrixB = generar_matriz(size)
 
-
     # Sumar matrices en paralelo
-    inicio_tiempo = time.time()
 
     sumaMatrix = multiprocessing.Array('i', size * size)  # Array compartido para almacenar el resultado
     sumaMatrix_np = np.frombuffer(sumaMatrix.get_obj(), dtype='i').reshape(size, size)
@@ -40,6 +38,8 @@ if __name__ == "__main__":
    
     filas_por_proceso = size // num_procesos
     procesos = []
+
+    inicio_tiempo = time.time()
 
     for i in range(num_procesos):
         filaInicio = i * filas_por_proceso
@@ -64,5 +64,7 @@ if __name__ == "__main__":
         target=write_to_file, args=(sumaMatrix_np, size, tiempo_total,num_procesos),daemon=True)
 
     proceso_demoniaco.start()
-     
-    proceso_demoniaco.join()
+    
+    time.sleep(1)
+
+    #proceso_demoniaco.join()

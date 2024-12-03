@@ -1,2 +1,2 @@
 Suma con Multiprocessing: 
-tiempo tomado al sumar las 5000 filas con 20 procesos: 5.90 segundos
+tiempo tomado al sumar las 18000 filas con 16 procesos: 78.67 segundos
