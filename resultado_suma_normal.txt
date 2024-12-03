@@ -1,0 +1,2 @@
+Suma normal: 
+tiempo tomado al sumar las 5000 filas : 22.14 segundos

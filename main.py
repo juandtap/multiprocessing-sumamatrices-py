@@ -2,6 +2,13 @@ import multiprocessing
 import numpy as np
 import time
 
+# proceso en background (demonio) para escribir el resultado en un archivo
+def write_to_file(sumaMatrix, size, tiempo , num_procesos,filename="resultado_suma_multiprocessing.txt"):
+    with open(filename, "w") as file:
+        file.write("Suma con Multiprocessing: \n")
+        file.write(f"tiempo tomado al sumar las {size} filas con {num_procesos} procesos: {tiempo:.2f} segundos") 
+    print(f"Resultados escritos en {filename}")
+
 # matriz con datos aleatorios
 def generar_matriz(size):
     return np.random.randint(0, 100, size=(size, size))
@@ -16,8 +23,8 @@ def sumar_parcial(matrixA, matrixB, sumaMatrix, filaInicio, filaFin):
 
 if __name__ == "__main__":
     
-    size = 1600
-    num_procesos = 16
+    size = 5000
+    num_procesos = 20
 
     # Generar matrices
     matrixA = generar_matriz(size)
@@ -49,5 +56,13 @@ if __name__ == "__main__":
 
     fin_tiempo = time.time()
 
-    print(f"Suma terminada en: {fin_tiempo - inicio_tiempo:.2f} segundos")
+    tiempo_total = fin_tiempo - inicio_tiempo
 
+    print(f"Suma terminada en: {tiempo_total:.2f} segundos")
+
+    proceso_demoniaco = multiprocessing.Process(
+        target=write_to_file, args=(sumaMatrix_np, size, tiempo_total,num_procesos),daemon=True)
+
+    proceso_demoniaco.start()
+     
+    proceso_demoniaco.join()
